@@ -26,6 +26,7 @@ private:
     ros::ServiceServer m_server;
     
     ExternalOutputPort<Vector3D<float>>* opti_pos_port;
+    ExternalOutputPort<Vector3D<float>>* opti_vel_port;
     ExternalOutputPort<Vector3D<float>>* opti_ori_port;
     ExternalOutputPort<Vector3D<float>>* imu_ori_port;
     ExternalOutputPort<Vector3D<float>>* imu_acc_port;
@@ -37,6 +38,12 @@ private:
     bool srv_callback(hear_msgs::set_float::Request&, hear_msgs::set_float::Response&);
     tf2::Matrix3x3 rot_offset;
     tf2::Vector3 trans_offset;
+
+    tf2::Vector3 opti_pos, prev_pos, opti_vel, prev_diff, _hold;
+    ros::Time prevT;
+    uint8_t first_read = 0;
+    const float PEAK_THRESH = 0.35;
+
 public:
     void process(){}
     ROSUnit_PoseProvider(ros::NodeHandle& nh);
