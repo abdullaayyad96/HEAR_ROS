@@ -1,16 +1,16 @@
-#ifndef ROSUNIT_RESETCLNT
-#define ROSUNIT_RESETCLNT
+#ifndef ROSUNIT_EMPTYCLNT
+#define ROSUNIT_EMPTYCLNT
 
 #include <ros/ros.h>
 #include <std_srvs/Empty.h>
 
 namespace HEAR{
 
-class ROSUnitResetClient {
+class ROSUnitEmptyClient {
 private:
     ros::ServiceClient m_client;
 public:
-    ROSUnitResetClient(ros::NodeHandle&, std::string);
+    ROSUnitEmptyClient(ros::NodeHandle&, std::string);
     bool process();
 };
 
