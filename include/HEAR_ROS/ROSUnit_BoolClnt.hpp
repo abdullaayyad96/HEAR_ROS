@@ -2,7 +2,7 @@
 #define ROSUNIT_BOOLCLNT
 
 #include <ros/ros.h>
-#include <hear_msgs/set_bool.h>
+#include <std_srvs/SetBool.h>
 #include "HEAR_core/DataTypes.hpp"
 #include <string>
 
@@ -13,7 +13,7 @@ private:
     ros::ServiceClient m_client;
 public:
     ROSUnitBoolClient(ros::NodeHandle&, std::string);
-    void process(DataMsg* t_msg);
+    bool process(bool data);
 };
 
 }
