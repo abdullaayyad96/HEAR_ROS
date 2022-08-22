@@ -9,7 +9,7 @@ ROSUnitBoolClient::ROSUnitBoolClient(ros::NodeHandle &nh, std::string t_name){
 bool ROSUnitBoolClient::process(bool data){
     std_srvs::SetBool msg;
     msg.request.data = data;    
-    m_client.call(msg);
+    return m_client.call(msg);
 }
 
 }

@@ -13,7 +13,7 @@ private:
     ros::ServiceClient m_client;
 public:
     ROSUnitFloatClient(ros::NodeHandle&, std::string);
-    float process(float data);
+    bool process(float data);
 };
 
 }
