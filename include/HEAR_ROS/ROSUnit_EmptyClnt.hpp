@@ -3,12 +3,11 @@
 
 #include <ros/ros.h>
 #include <std_srvs/Empty.h>
+#include "HEAR_ROS/ROSUnit_Client.hpp"
 
 namespace HEAR{
 
-class ROSUnitEmptyClient {
-private:
-    ros::ServiceClient m_client;
+class ROSUnitEmptyClient: public ROSUnit_Client{
 public:
     ROSUnitEmptyClient(ros::NodeHandle&, std::string);
     bool process();
