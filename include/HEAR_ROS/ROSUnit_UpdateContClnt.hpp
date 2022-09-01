@@ -14,6 +14,7 @@
 namespace HEAR{
 class ROSUnit_UpdateContClnt {
 private:
+    ros::NodeHandle nh_;
     UpdateMsg _update_controller_msg; 
     ros::ServiceClient m_client_pid_x;
     ros::ServiceClient m_client_pid_y;

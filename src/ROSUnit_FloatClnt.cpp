@@ -2,8 +2,8 @@
 
 namespace HEAR{
 
-ROSUnitFloatClient::ROSUnitFloatClient(ros::NodeHandle &nh, std::string t_name){
-    m_client = nh.serviceClient<hear_msgs::set_float>(t_name);
+ROSUnitFloatClient::ROSUnitFloatClient(ros::NodeHandle &nh, std::string t_name) : nh_(nh){
+    m_client = nh_.serviceClient<hear_msgs::set_float>(t_name);
 }
 
 bool ROSUnitFloatClient::process(float data){

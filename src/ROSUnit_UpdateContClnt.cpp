@@ -2,29 +2,29 @@
 
 namespace HEAR{
 
-ROSUnit_UpdateContClnt::ROSUnit_UpdateContClnt(ros::NodeHandle& t_main_handler) {
+ROSUnit_UpdateContClnt::ROSUnit_UpdateContClnt(ros::NodeHandle& t_main_handler) : nh_(t_main_handler){
 
     // PID of the inner loop
-    m_client_pid_x = t_main_handler.serviceClient<hear_msgs::Update_Controller_PID>("update_controller/pid/x");
-    m_client_pid_y = t_main_handler.serviceClient<hear_msgs::Update_Controller_PID>("update_controller/pid/y");
-    m_client_pid_z = t_main_handler.serviceClient<hear_msgs::Update_Controller_PID>("update_controller/pid/z");
+    m_client_pid_x = nh_.serviceClient<hear_msgs::Update_Controller_PID>("update_controller/pid/x");
+    m_client_pid_y = nh_.serviceClient<hear_msgs::Update_Controller_PID>("update_controller/pid/y");
+    m_client_pid_z = nh_.serviceClient<hear_msgs::Update_Controller_PID>("update_controller/pid/z");
 
     // PID of the outer loop
-    m_client_pid_roll = t_main_handler.serviceClient<hear_msgs::Update_Controller_PID>("update_controller/pid/roll");
-    m_client_pid_pitch = t_main_handler.serviceClient<hear_msgs::Update_Controller_PID>("update_controller/pid/pitch");
-    m_client_pid_yaw = t_main_handler.serviceClient<hear_msgs::Update_Controller_PID>("update_controller/pid/yaw");
-    m_client_pid_yaw_rate = t_main_handler.serviceClient<hear_msgs::Update_Controller_PID>("update_controller/pid/yaw_rate");
+    m_client_pid_roll = nh_.serviceClient<hear_msgs::Update_Controller_PID>("update_controller/pid/roll");
+    m_client_pid_pitch = nh_.serviceClient<hear_msgs::Update_Controller_PID>("update_controller/pid/pitch");
+    m_client_pid_yaw = nh_.serviceClient<hear_msgs::Update_Controller_PID>("update_controller/pid/yaw");
+    m_client_pid_yaw_rate = nh_.serviceClient<hear_msgs::Update_Controller_PID>("update_controller/pid/yaw_rate");
 
     // MRFT of the inner loop
-    m_client_mrft_x = t_main_handler.serviceClient<hear_msgs::Update_Controller_MRFT>("update_controller/mrft/x");
-    m_client_mrft_y = t_main_handler.serviceClient<hear_msgs::Update_Controller_MRFT>("update_controller/mrft/y");
-    m_client_mrft_z = t_main_handler.serviceClient<hear_msgs::Update_Controller_MRFT>("update_controller/mrft/z");
+    m_client_mrft_x = nh_.serviceClient<hear_msgs::Update_Controller_MRFT>("update_controller/mrft/x");
+    m_client_mrft_y = nh_.serviceClient<hear_msgs::Update_Controller_MRFT>("update_controller/mrft/y");
+    m_client_mrft_z = nh_.serviceClient<hear_msgs::Update_Controller_MRFT>("update_controller/mrft/z");
 
     // MRFT of the outer loop
-    m_client_mrft_roll = t_main_handler.serviceClient<hear_msgs::Update_Controller_MRFT>("update_controller/mrft/roll");
-    m_client_mrft_pitch = t_main_handler.serviceClient<hear_msgs::Update_Controller_MRFT>("update_controller/mrft/pitch");
-    m_client_mrft_yaw = t_main_handler.serviceClient<hear_msgs::Update_Controller_MRFT>("update_controller/mrft/yaw");
-    m_client_mrft_yaw_rate = t_main_handler.serviceClient<hear_msgs::Update_Controller_MRFT>("update_controller/mrft/yaw_rate");
+    m_client_mrft_roll = nh_.serviceClient<hear_msgs::Update_Controller_MRFT>("update_controller/mrft/roll");
+    m_client_mrft_pitch = nh_.serviceClient<hear_msgs::Update_Controller_MRFT>("update_controller/mrft/pitch");
+    m_client_mrft_yaw = nh_.serviceClient<hear_msgs::Update_Controller_MRFT>("update_controller/mrft/yaw");
+    m_client_mrft_yaw_rate = nh_.serviceClient<hear_msgs::Update_Controller_MRFT>("update_controller/mrft/yaw_rate");
 }   
 
 ROSUnit_UpdateContClnt::~ROSUnit_UpdateContClnt() {

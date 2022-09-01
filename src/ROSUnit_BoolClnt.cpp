@@ -2,8 +2,8 @@
 
 namespace HEAR{
 
-ROSUnitBoolClient::ROSUnitBoolClient(ros::NodeHandle &nh, std::string t_name){
-    m_client = nh.serviceClient<std_srvs::SetBool>(t_name);
+ROSUnitBoolClient::ROSUnitBoolClient(ros::NodeHandle &nh, std::string t_name): nh_(nh){
+    m_client = nh_.serviceClient<std_srvs::SetBool>(t_name);
 }
 
 bool ROSUnitBoolClient::process(bool data){

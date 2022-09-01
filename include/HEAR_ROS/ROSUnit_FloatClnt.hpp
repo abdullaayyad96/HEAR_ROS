@@ -11,6 +11,7 @@ namespace HEAR{
 
 class ROSUnitFloatClient : public ROSUnit_Client{
 public:
+    ros::NodeHandle nh_;
     ROSUnitFloatClient(ros::NodeHandle&, std::string);
     bool process(float data);
 };

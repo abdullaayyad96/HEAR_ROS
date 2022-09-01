@@ -12,7 +12,8 @@ namespace HEAR{
 class ROSUnitBoolClient: public ROSUnit_Client{
 
 public:
-    ROSUnitBoolClient(ros::NodeHandle&, std::string);
+    ros::NodeHandle nh_;
+    ROSUnitBoolClient(ros::NodeHandle& nh, std::string);
     bool process(bool data);
 };
 
