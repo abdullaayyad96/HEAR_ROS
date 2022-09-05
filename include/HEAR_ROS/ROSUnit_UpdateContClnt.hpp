@@ -31,7 +31,7 @@ private:
     ros::ServiceClient m_client_mrft_yaw;
     ros::ServiceClient m_client_mrft_yaw_rate;
 public:
-    void process();
+    void process(UpdateMsg* t_msg, BLOCK_ID ID);
     ROSUnit_UpdateContClnt(ros::NodeHandle&);
     ~ROSUnit_UpdateContClnt();
     

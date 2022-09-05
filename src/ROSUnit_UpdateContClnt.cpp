@@ -31,7 +31,7 @@ ROSUnit_UpdateContClnt::~ROSUnit_UpdateContClnt() {
 
 }
 
-void ROSUnit_UpdateContClnt::process(UpdateMsg* t_msg, CONTROLSYS_ID ID) {
+void ROSUnit_UpdateContClnt::process(UpdateMsg* t_msg, BLOCK_ID ID) {
     //TODO: Write this function
     if(ID == PID) {
         PID_UpdateMsg* _update_msg = (PID_UpdateMsg*)t_msg;
