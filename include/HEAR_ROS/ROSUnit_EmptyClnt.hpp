@@ -7,7 +7,7 @@
 
 namespace HEAR{
 
-class ROSUnitEmptyClient: public ROSUnit_Client{
+class ROSUnitEmptyClient: public ROSUnit_Client<bool>{
 public:
     ros::NodeHandle nh_;
     ROSUnitEmptyClient(ros::NodeHandle&, std::string);

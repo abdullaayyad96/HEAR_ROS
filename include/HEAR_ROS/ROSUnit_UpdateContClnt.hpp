@@ -15,7 +15,6 @@ namespace HEAR{
 class ROSUnit_UpdateContClnt {
 private:
     ros::NodeHandle nh_;
-    UpdateMsg _update_controller_msg; 
     ros::ServiceClient m_client_pid_x;
     ros::ServiceClient m_client_pid_y;
     ros::ServiceClient m_client_pid_z;
@@ -31,7 +30,7 @@ private:
     ros::ServiceClient m_client_mrft_yaw;
     ros::ServiceClient m_client_mrft_yaw_rate;
 public:
-    void process(UpdateMsg* t_msg, BLOCK_ID ID);
+    bool process(UpdateMsg* t_msg, BLOCK_ID ID);
     ROSUnit_UpdateContClnt(ros::NodeHandle&);
     ~ROSUnit_UpdateContClnt();
     

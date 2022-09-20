@@ -6,9 +6,9 @@ ROSUnitFloatClient::ROSUnitFloatClient(ros::NodeHandle &nh, std::string t_name) 
     m_client = nh_.serviceClient<hear_msgs::set_float>(t_name);
 }
 
-bool ROSUnitFloatClient::process(float data){
+bool ROSUnitFloatClient::process(){
     hear_msgs::set_float msg; 
-    msg.request.data = data;   
+    msg.request.data = this->data;   
     return m_client.call(msg);
 }
 

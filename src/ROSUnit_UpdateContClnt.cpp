@@ -31,8 +31,7 @@ ROSUnit_UpdateContClnt::~ROSUnit_UpdateContClnt() {
 
 }
 
-void ROSUnit_UpdateContClnt::process(UpdateMsg* t_msg, BLOCK_ID ID) {
-    //TODO: Write this function
+bool ROSUnit_UpdateContClnt::process(UpdateMsg* t_msg, BLOCK_ID ID) {
     if(ID == PID) {
         PID_UpdateMsg* _update_msg = (PID_UpdateMsg*)t_msg;
         hear_msgs::Update_Controller_PID srv;
@@ -61,9 +60,11 @@ void ROSUnit_UpdateContClnt::process(UpdateMsg* t_msg, BLOCK_ID ID) {
         }
         if (success1 && success2 && success3 && success4) {
             ROS_INFO("CONTROLLER UPDATED. id: %d", static_cast<int>(srv.request.controller_parameters.id));
+            return true;
         }
         else {
             ROS_ERROR("Failed to call service /update_controller");
+            return false;
         }
     }
     else if(ID == MRFT) {
@@ -72,7 +73,6 @@ void ROSUnit_UpdateContClnt::process(UpdateMsg* t_msg, BLOCK_ID ID) {
         srv.request.controller_parameters.id = static_cast<int>(_update_msg->param.id);
         srv.request.controller_parameters.mrft_beta = _update_msg->param.beta;
         srv.request.controller_parameters.mrft_relay_amp = _update_msg->param.relay_amp;
-        srv.request.controller_parameters.mrft_bias = _update_msg->param.bias;
         srv.request.controller_parameters.mrft_no_switch_delay = _update_msg->param.no_switch_delay_in_ms;
         srv.request.controller_parameters.mrft_conf_samples = _update_msg->param.num_of_peak_conf_samples;
         bool success1 = false;
@@ -92,10 +92,16 @@ void ROSUnit_UpdateContClnt::process(UpdateMsg* t_msg, BLOCK_ID ID) {
         }
         if (success1 && success2 && success3 && success4) {
             ROS_INFO("CONTROLLER UPDATED. id: %d", static_cast<int>(srv.request.controller_parameters.id));
+            return true;
         }
         else {
             ROS_ERROR("Failed to call service /update_controller");
+            return false;
         }
+    }
+    else{
+        ROS_ERROR("Failed to update controller");
+        return false;
     }
 }
 

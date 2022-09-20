@@ -6,9 +6,12 @@
 
 namespace HEAR{
 
+template <typename T>
 class ROSUnit_Client {
-protected:
+public:
+    T data;
     ros::ServiceClient m_client;
+    virtual bool process() {return true;};
 };
 }
 

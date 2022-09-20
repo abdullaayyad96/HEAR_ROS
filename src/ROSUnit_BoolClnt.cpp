@@ -6,9 +6,9 @@ ROSUnitBoolClient::ROSUnitBoolClient(ros::NodeHandle &nh, std::string t_name): n
     m_client = nh_.serviceClient<std_srvs::SetBool>(t_name);
 }
 
-bool ROSUnitBoolClient::process(bool data){
+bool ROSUnitBoolClient::process(){
     std_srvs::SetBool msg;
-    msg.request.data = data;    
+    msg.request.data = this->data;    
     return m_client.call(msg);
 }
 
