@@ -43,22 +43,53 @@ bool ROSUnit_UpdateContClnt::process(UpdateMsg* t_msg, BLOCK_ID ID) {
         srv.request.controller_parameters.pid_anti_windup = _update_msg->param.anti_windup;
         srv.request.controller_parameters.pid_en_pv_derivation = _update_msg->param.en_pv_derivation;
         srv.request.controller_parameters.pid_dt = _update_msg->param.dt;
-        bool success1 = false;
-        bool success2 = false;
-        bool success3 = false; 
-        bool success4 = false;
-        if( (int)_update_msg->param.id <= (int)PID_ID::PID_Z){
-            success1 = m_client_pid_x.call(srv);
-            success2 = m_client_pid_y.call(srv);
-            success3 = m_client_pid_z.call(srv);
-            success4 = true;
-        }else{
-            success1 = m_client_pid_roll.call(srv);
-            success2 = m_client_pid_pitch.call(srv);
-            success3 = m_client_pid_yaw.call(srv);
-            success4 = m_client_pid_yaw_rate.call(srv);
+        bool success = false;
+        
+        switch ((int)_update_msg->param.id)
+        {
+            case (int)PID_ID::PID_X:
+            {
+                success = m_client_pid_x.call(srv);
+            }
+            break;
+            case (int)PID_ID::PID_Y:
+            {
+                success = m_client_pid_y.call(srv);
+            }
+            break;
+            case (int)PID_ID::PID_Z:
+            {
+                success = m_client_pid_z.call(srv);
+            }
+            break;
+            case (int)PID_ID::PID_ROLL:
+            {
+                success = m_client_pid_roll.call(srv);
+            }
+            break;
+            case (int)PID_ID::PID_PITCH:
+            {
+                success = m_client_pid_pitch.call(srv);
+            }
+            break;
+            case (int)PID_ID::PID_YAW:
+            {
+                success = m_client_pid_yaw.call(srv);
+            }
+            break;
+            case (int)PID_ID::PID_YAW_RATE:
+            {
+                success = m_client_pid_yaw_rate.call(srv);
+            }
+            break;
+            default:
+            {
+                std::cerr <<"Invalid Controller ID type" <<std::endl;
+                assert(false);
+                break;
+            }
         }
-        if (success1 && success2 && success3 && success4) {
+        if (success) {
             ROS_INFO("CONTROLLER UPDATED. id: %d", static_cast<int>(srv.request.controller_parameters.id));
             return true;
         }
@@ -75,22 +106,54 @@ bool ROSUnit_UpdateContClnt::process(UpdateMsg* t_msg, BLOCK_ID ID) {
         srv.request.controller_parameters.mrft_relay_amp = _update_msg->param.relay_amp;
         srv.request.controller_parameters.mrft_no_switch_delay = _update_msg->param.no_switch_delay_in_ms;
         srv.request.controller_parameters.mrft_conf_samples = _update_msg->param.num_of_peak_conf_samples;
-        bool success1 = false;
-        bool success2 = false;
-        bool success3 = false; 
-        bool success4 = false;
-        if( (int)_update_msg->param.id <= (int)MRFT_ID::MRFT_Z){
-            success1 = m_client_mrft_x.call(srv);
-            success2 = m_client_mrft_y.call(srv);
-            success3 = m_client_mrft_z.call(srv);
-            success4 = true;
-        }else{
-            success1 = m_client_mrft_roll.call(srv);
-            success2 = m_client_mrft_pitch.call(srv);
-            success3 = m_client_mrft_yaw.call(srv);
-            success4 = m_client_mrft_yaw_rate.call(srv);
+        bool success = false;
+        
+        switch((int)_update_msg->param.id)
+        {
+            case (int)MRFT_ID::MRFT_X:
+            {
+                success = m_client_mrft_x.call(srv);
+            }
+            break;
+            case (int)MRFT_ID::MRFT_Y:
+            {
+                success = m_client_mrft_y.call(srv);
+            }
+            break;
+            case (int)MRFT_ID::MRFT_Z:
+            {
+                success = m_client_mrft_z.call(srv);
+            }
+            break;
+            case (int)MRFT_ID::MRFT_ROLL:
+            {
+                success = m_client_mrft_roll.call(srv);
+            }
+            break;
+            case (int)MRFT_ID::MRFT_PITCH:
+            {
+                success = m_client_mrft_pitch.call(srv);
+            }
+            break;
+            case (int)MRFT_ID::MRFT_YAW:
+            {
+                success = m_client_mrft_yaw.call(srv);
+            }
+            break;
+            case (int)MRFT_ID::MRFT_YAW_RATE:
+            {
+                success = m_client_mrft_yaw_rate.call(srv);
+            }
+            break;
+            default:
+            {
+                std::cerr <<"Invalid Controller ID type" <<std::endl;
+                assert(false);
+                break;
+            }
+
         }
-        if (success1 && success2 && success3 && success4) {
+        if (success) {
             ROS_INFO("CONTROLLER UPDATED. id: %d", static_cast<int>(srv.request.controller_parameters.id));
             return true;
         }
