@@ -3,11 +3,11 @@
 namespace HEAR{
 
 ROSUnitBoolClient::ROSUnitBoolClient(ros::NodeHandle &nh, std::string t_name): nh_(nh){
-    m_client = nh_.serviceClient<std_srvs::SetBool>(t_name);
+    m_client = nh_.serviceClient<hear_msgs::set_bool>(t_name);
 }
 
 bool ROSUnitBoolClient::process(){
-    std_srvs::SetBool msg;
+    hear_msgs::set_bool msg;
     msg.request.data = this->data;    
     return m_client.call(msg);
 }
