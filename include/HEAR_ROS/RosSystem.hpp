@@ -18,6 +18,7 @@
 #include "HEAR_ROS/ROSUnit_PointSub.hpp"
 #include "HEAR_ROS/ROSUnit_FloatSub.hpp"
 #include "HEAR_ROS/ROSUnit_QuatSub.hpp"
+#include "HEAR_ROS/ROSUnit_FloatSrv.hpp"
 #include <ros/ros.h>
 
 namespace HEAR{
@@ -175,6 +176,11 @@ ExternalTrigger* RosSystem::createUpdateTrigger(UPDATE_MSG_TYPE type, std::strin
         }
         case UPDATE_MSG_TYPE::MRFT_UPDATE : {
             auto srv = new ROSUnit_UpdateMRFTsrv(pnh_);
+            trig = srv->registerServer(topic);
+            break;
+        }
+        case UPDATE_MSG_TYPE::CONSTANT_UPDATE : {
+            auto srv = new ROSUnit_FloatServer(pnh_);
             trig = srv->registerServer(topic);
             break;
         }
