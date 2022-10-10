@@ -73,6 +73,7 @@ bool ROSUnit_MRFTSwitchSrv::srvCallback(hear_msgs::set_float::Request& req, hear
             trig.first->UpdateCallback((UpdateMsg*)&sw_msg);
         }
     }
+    return true;
 }
 
 }
