@@ -8,6 +8,7 @@
 #include <hear_msgs/Update_Controller_PID.h>
 #include <hear_msgs/Update_Controller_MRFT.h>
 #include "HEAR_core/DataTypes.hpp"
+#include <string>
 
 
 
@@ -31,7 +32,7 @@ private:
     ros::ServiceClient m_client_mrft_yaw_rate;
 public:
     bool process(UpdateMsg* t_msg, BLOCK_ID ID);
-    ROSUnit_UpdateContClnt(ros::NodeHandle&);
+    ROSUnit_UpdateContClnt(ros::NodeHandle& nh, std::string Drone_Name);
     ~ROSUnit_UpdateContClnt();
     
 };
