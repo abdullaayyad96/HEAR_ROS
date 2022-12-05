@@ -7,6 +7,7 @@
 #include <hear_msgs/MRFT_param.h>
 #include <hear_msgs/Update_Controller_PID.h>
 #include <hear_msgs/Update_Controller_MRFT.h>
+#include <hear_msgs/Update_Controller_Bounding.h>
 #include "HEAR_core/DataTypes.hpp"
 #include <string>
 
@@ -30,6 +31,9 @@ private:
     ros::ServiceClient m_client_mrft_pitch;
     ros::ServiceClient m_client_mrft_yaw;
     ros::ServiceClient m_client_mrft_yaw_rate;
+    ros::ServiceClient m_client_bounding_x;
+    ros::ServiceClient m_client_bounding_y;
+    ros::ServiceClient m_client_bounding_z;
 public:
     bool process(UpdateMsg* t_msg, BLOCK_ID ID);
     ROSUnit_UpdateContClnt(ros::NodeHandle& nh, std::string Drone_Name);

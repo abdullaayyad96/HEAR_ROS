@@ -25,6 +25,11 @@ ROSUnit_UpdateContClnt::ROSUnit_UpdateContClnt(ros::NodeHandle& t_main_handler, 
     m_client_mrft_pitch = nh_.serviceClient<hear_msgs::Update_Controller_MRFT>(Drone_Name + "update_controller/mrft/pitch");
     m_client_mrft_yaw = nh_.serviceClient<hear_msgs::Update_Controller_MRFT>(Drone_Name + "update_controller/mrft/yaw");
     m_client_mrft_yaw_rate = nh_.serviceClient<hear_msgs::Update_Controller_MRFT>(Drone_Name + "update_controller/mrft/yaw_rate");
+
+    // Bounding of the outer loop
+    m_client_bounding_x = nh_.serviceClient<hear_msgs::Update_Controller_Bounding>(Drone_Name + "update_controller/bounding/x");
+    m_client_bounding_y = nh_.serviceClient<hear_msgs::Update_Controller_Bounding>(Drone_Name + "update_controller/bounding/y");
+    m_client_bounding_z = nh_.serviceClient<hear_msgs::Update_Controller_Bounding>(Drone_Name + "update_controller/bounding/z");
 }
 
 ROSUnit_UpdateContClnt::~ROSUnit_UpdateContClnt() {
@@ -94,7 +99,7 @@ bool ROSUnit_UpdateContClnt::process(UpdateMsg* t_msg, BLOCK_ID ID) {
             return true;
         }
         else {
-            ROS_ERROR("Failed to call service /update_controller");
+            ROS_ERROR("Failed to call service /update_controller/pid");
             return false;
         }
     }
@@ -158,7 +163,51 @@ bool ROSUnit_UpdateContClnt::process(UpdateMsg* t_msg, BLOCK_ID ID) {
             return true;
         }
         else {
-            ROS_ERROR("Failed to call service /update_controller");
+            ROS_ERROR("Failed to call service /update_controller/mrft");
+            return false;
+        }
+    }
+    else if(ID == BOUNDINGCTRL){
+        BoundingCtrl_UpdateMsg* _update_msg = (BoundingCtrl_UpdateMsg*)t_msg;
+        hear_msgs::Update_Controller_Bounding srv;
+        srv.request.controller_parameters.id = static_cast<int>(_update_msg->param.id);
+        srv.request.controller_parameters.bounding_eps_1 = _update_msg->param.eps_1;
+        srv.request.controller_parameters.bounding_eps_2 = _update_msg->param.eps_2;
+        srv.request.controller_parameters.bounding_h_o1 = _update_msg->param.h_o1;
+        srv.request.controller_parameters.bounding_h_o2 = _update_msg->param.h_o1;
+        bool success = false;
+        
+        switch((int)_update_msg->param.id)
+        {
+            case (int)BOUNDING_ID::BOUNDING_X:
+            {
+                success = m_client_bounding_x.call(srv);
+            }
+            break;
+            case (int)BOUNDING_ID::BOUNDING_Y:
+            {
+                success = m_client_bounding_y.call(srv);
+            }
+            break;
+            case (int)BOUNDING_ID::BOUNDING_Z:
+            {
+                success = m_client_bounding_z.call(srv);
+            }
+            break;
+            default:
+            {
+                std::cerr <<"Invalid Controller ID type" <<std::endl;
+                assert(false);
+                break;
+            }
+
+        }
+        if (success) {
+            ROS_INFO("CONTROLLER UPDATED. id: %d", static_cast<int>(srv.request.controller_parameters.id));
+            return true;
+        }
+        else {
+            ROS_ERROR("Failed to call service /update_controller/bounding");
             return false;
         }
     }
