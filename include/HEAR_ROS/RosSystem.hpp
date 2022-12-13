@@ -91,7 +91,7 @@ ROSUnit_Sub* RosSystem::createSub(TYPE d_type, std::string topic_name){
             sub = new ROSUnitFloatSub(nh_, topic_name, sub_counter++);
             break;
         case TYPE::FloatVec :
-            sub = new ROSUnitFloatArrSub(pnh_, topic_name, pub_counter++);
+            sub = new ROSUnitFloatArrSub(nh_, topic_name, sub_counter++);
             break;
         default:
             std::cout <<"RosSystem: invalid subscriber type" <<std::endl;
