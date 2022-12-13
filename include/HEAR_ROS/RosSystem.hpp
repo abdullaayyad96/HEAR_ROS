@@ -7,12 +7,14 @@
 #include "HEAR_core/System.hpp"
 #include "HEAR_ROS/ROSUnit_Pub.hpp"
 #include "HEAR_ROS/ROSUnit_FloatArrPub.hpp"
+#include "HEAR_ROS/ROSUnit_FloatArrSub.hpp"
 #include "HEAR_ROS/ROSUnit_FloatPub.hpp"
 #include "HEAR_ROS/ROSUnit_PointPub.hpp"
 #include "HEAR_ROS/ROSUnit_QuatPub.hpp"
 #include "HEAR_ROS/ROSUnit_ResetSrv.hpp"
 #include "HEAR_ROS/ROSUnit_UpdateContSrv.hpp"
 #include "HEAR_ROS/ROSUnit_UpdateMRFTsrv.hpp"
+#include "HEAR_ROS/ROSUnit_UpdateBOUNDINGsrv.hpp"
 #include "HEAR_ROS/ROSUnit_BoolSrv.hpp"
 #include "HEAR_ROS/ROSUnit_Sub.hpp"
 #include "HEAR_ROS/ROSUnit_PointSub.hpp"
@@ -88,8 +90,11 @@ ROSUnit_Sub* RosSystem::createSub(TYPE d_type, std::string topic_name){
         case TYPE::Float :
             sub = new ROSUnitFloatSub(nh_, topic_name, sub_counter++);
             break;
+        case TYPE::FloatVec :
+            sub = new ROSUnitFloatArrSub(pnh_, topic_name, pub_counter++);
+            break;
         default:
-            std::cout <<"invalid subscriber type" <<std::endl;
+            std::cout <<"RosSystem: invalid subscriber type" <<std::endl;
             assert(false);
             break;
     }
@@ -179,13 +184,18 @@ ExternalTrigger* RosSystem::createUpdateTrigger(UPDATE_MSG_TYPE type, std::strin
             trig = srv->registerServer(topic);
             break;
         }
+        case UPDATE_MSG_TYPE::BOUNDINGCTRL_UPDATE : {
+            auto srv = new ROSUnit_UpdateBOUNDINGsrv(pnh_);
+            trig = srv->registerServer(topic);
+            break;
+        }
         case UPDATE_MSG_TYPE::CONSTANT_UPDATE : {
             auto srv = new ROSUnit_FloatServer(pnh_);
             trig = srv->registerServer(topic);
             break;
         }
         default:
-            return NULL;
+            ROS_ERROR("RosSystem::createUpdateTrigger: Unknown update message type");
     }
     this->addExternalTrigger(trig, topic);
 
