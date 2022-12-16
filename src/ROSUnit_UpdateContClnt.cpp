@@ -174,7 +174,7 @@ bool ROSUnit_UpdateContClnt::process(UpdateMsg* t_msg, BLOCK_ID ID) {
         srv.request.controller_parameters.bounding_eps_1 = _update_msg->param.eps_1;
         srv.request.controller_parameters.bounding_eps_2 = _update_msg->param.eps_2;
         srv.request.controller_parameters.bounding_h_o1 = _update_msg->param.h_o1;
-        srv.request.controller_parameters.bounding_h_o2 = _update_msg->param.h_o1;
+        srv.request.controller_parameters.bounding_h_o2 = _update_msg->param.h_o2;
         bool success = false;
         
         switch((int)_update_msg->param.id)
