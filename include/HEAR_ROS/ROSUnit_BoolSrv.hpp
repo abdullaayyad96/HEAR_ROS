@@ -12,11 +12,11 @@ class ROSUnit_BoolServer {
 private:
     ros::NodeHandle nh_;
     ros::ServiceServer m_server;
-    UpdateTrigger* ext_trig;
+    ExternalTrigger<BaseMsg>* ext_trig;
     bool srv_callback(hear_msgs::set_bool::Request&, hear_msgs::set_bool::Response&);
 public:
     ROSUnit_BoolServer(ros::NodeHandle&);
-    UpdateTrigger* registerServer(const std::string&);
+    ExternalTrigger<BaseMsg>* registerServer(const std::string&);
     
 };
 

@@ -13,11 +13,11 @@ class ROSUnit_UpdateContSrv {
 private:
     ros::NodeHandle nh_;
     ros::ServiceServer m_server;
-    UpdateTrigger* ext_trig;
+    ExternalTrigger<BaseMsg>* ext_trig;
     bool srv_callback(hear_msgs::Update_Controller_PID::Request&, hear_msgs::Update_Controller_PID::Response&);
 public:
     ROSUnit_UpdateContSrv(ros::NodeHandle& nh) : nh_(nh) {}
-    UpdateTrigger* registerServer(const std::string&);
+    ExternalTrigger<BaseMsg>* registerServer(const std::string&);
     
 };
 

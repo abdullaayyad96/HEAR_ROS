@@ -13,11 +13,11 @@ class ROSUnit_UpdateBOUNDINGsrv {
 private:
     ros::NodeHandle nh_;
     ros::ServiceServer m_server;
-    UpdateTrigger* ext_trig;
+    ExternalTrigger<BaseMsg>* ext_trig;
     bool srv_callback(hear_msgs::Update_Controller_Bounding::Request&, hear_msgs::Update_Controller_Bounding::Response&);
 public:
     ROSUnit_UpdateBOUNDINGsrv(ros::NodeHandle& nh) : nh_(nh) {}
-    UpdateTrigger* registerServer(const std::string&);
+    ExternalTrigger<BaseMsg>* registerServer(const std::string&);
     
 };
 

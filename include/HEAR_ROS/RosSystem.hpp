@@ -15,7 +15,9 @@
 #include "HEAR_ROS/ROSUnit_UpdateContSrv.hpp"
 #include "HEAR_ROS/ROSUnit_UpdateMRFTsrv.hpp"
 #include "HEAR_ROS/ROSUnit_UpdateBOUNDINGsrv.hpp"
+#include "HEAR_ROS/ROSUnit_UpdateTrajectorySrv.hpp"
 #include "HEAR_ROS/ROSUnit_BoolSrv.hpp"
+#include "HEAR_ROS/ROSUnit_IntSrv.hpp"
 #include "HEAR_ROS/ROSUnit_Sub.hpp"
 #include "HEAR_ROS/ROSUnit_PointSub.hpp"
 #include "HEAR_ROS/ROSUnit_FloatSub.hpp"
@@ -37,10 +39,10 @@ public:
 
     template <class T> void connectSub(ROSUnit_Sub* sub, InputPort<T>* port);
 
-    ExternalTrigger* createResetTrigger(std::string topic);
-    ExternalTrigger* createResetTrigger(std::string topic, Block* dest_block);
-    ExternalTrigger* createUpdateTrigger(UPDATE_MSG_TYPE type, std::string topic);
-    ExternalTrigger* createUpdateTrigger(UPDATE_MSG_TYPE type, std::string topic, Block* dest_block);
+    ExternalTrigger<BaseMsg>* createResetTrigger(std::string topic);
+    ExternalTrigger<BaseMsg>* createResetTrigger(std::string topic, AsyncInputPort<BaseMsg>* dest_AsyncIP);
+    ExternalTrigger<BaseMsg>* createUpdateTrigger(MSG_TYPE type, std::string topic);
+    ExternalTrigger<BaseMsg>* createUpdateTrigger(MSG_TYPE type, std::string topic, AsyncInputPort<BaseMsg>* dest_AsyncIP);
     void start();
 private:
     ros::NodeHandle nh_;
@@ -153,43 +155,53 @@ void RosSystem::createPub(std::string topic_name, OutputPort<float>* src_port){
     this->createPub<float>(TYPE::Float, topic_name, src_port);
 }
 
-ExternalTrigger* RosSystem::createResetTrigger(std::string topic){
+ExternalTrigger<BaseMsg>* RosSystem::createResetTrigger(std::string topic){
     auto srv = new ROSUnit_ResetServer(pnh_);
     auto trig = srv->registerServer(topic);
     this->addExternalTrigger(trig, topic);
     return trig;
 }
 
-ExternalTrigger* RosSystem::createResetTrigger(std::string topic, Block* dest_block){
+ExternalTrigger<BaseMsg>* RosSystem::createResetTrigger(std::string topic, AsyncInputPort<BaseMsg>* dest_AsyncIP){
     auto trig = this->createResetTrigger(topic);
-    this->connectExternalTrigger(trig, dest_block);
+    this->connectExternalTrigger(trig, dest_AsyncIP);
     return trig;
 }
 
-ExternalTrigger* RosSystem::createUpdateTrigger(UPDATE_MSG_TYPE type, std::string topic){
+ExternalTrigger<BaseMsg>* RosSystem::createUpdateTrigger(MSG_TYPE type, std::string topic){
     //TODO make class for ROSUnit_Srv
-    ExternalTrigger* trig;
+    ExternalTrigger<BaseMsg>* trig;
     switch(type){
-        case UPDATE_MSG_TYPE::PID_UPDATE :{
+        case MSG_TYPE::PID_UPDATE :{
             auto srv = new ROSUnit_UpdateContSrv(pnh_);
             trig = srv->registerServer(topic);
             break;}
-        case UPDATE_MSG_TYPE::BOOL_MSG :{
+        case MSG_TYPE::BOOL_MSG :{
             auto srv = new ROSUnit_BoolServer(pnh_);
             trig = srv->registerServer(topic);
             break;
         }
-        case UPDATE_MSG_TYPE::MRFT_UPDATE : {
+        case MSG_TYPE::INT_MSG :{
+            auto srv = new ROSUnit_IntServer(pnh_);
+            trig = srv->registerServer(topic);
+            break;
+        }
+        case MSG_TYPE::MRFT_UPDATE : {
             auto srv = new ROSUnit_UpdateMRFTsrv(pnh_);
             trig = srv->registerServer(topic);
             break;
         }
-        case UPDATE_MSG_TYPE::BOUNDINGCTRL_UPDATE : {
+        case MSG_TYPE::BOUNDINGCTRL_UPDATE : {
             auto srv = new ROSUnit_UpdateBOUNDINGsrv(pnh_);
             trig = srv->registerServer(topic);
             break;
         }
-        case UPDATE_MSG_TYPE::CONSTANT_UPDATE : {
+        case MSG_TYPE::TRAJECTORY_UPDATE : {
+            auto srv = new ROSUnit_UpdateTrajectorySrv(pnh_);
+            trig = srv->registerServer(topic);
+            break;
+        }
+        case MSG_TYPE::FLOAT_MSG : {
             auto srv = new ROSUnit_FloatServer(pnh_);
             trig = srv->registerServer(topic);
             break;
@@ -202,9 +214,9 @@ ExternalTrigger* RosSystem::createUpdateTrigger(UPDATE_MSG_TYPE type, std::strin
     return trig;
 }
 
-ExternalTrigger* RosSystem::createUpdateTrigger(UPDATE_MSG_TYPE type, std::string topic, Block* dest_block){
+ExternalTrigger<BaseMsg>* RosSystem::createUpdateTrigger(MSG_TYPE type, std::string topic, AsyncInputPort<BaseMsg>* dest_AsyncIP){
     auto trig = this->createUpdateTrigger(type, topic);
-    this->connectExternalTrigger(trig, dest_block);
+    this->connectExternalTrigger(trig, dest_AsyncIP);
 
     return trig;
 }

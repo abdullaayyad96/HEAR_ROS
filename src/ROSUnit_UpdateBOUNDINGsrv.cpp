@@ -2,8 +2,8 @@
 
 namespace HEAR{
 
-UpdateTrigger* ROSUnit_UpdateBOUNDINGsrv::registerServer(const std::string &service_topic){
-    ext_trig = new UpdateTrigger;
+ExternalTrigger<BaseMsg>* ROSUnit_UpdateBOUNDINGsrv::registerServer(const std::string &service_topic){
+    ext_trig = new ExternalTrigger<BaseMsg>;
     this->m_server = this->nh_.advertiseService(service_topic, &ROSUnit_UpdateBOUNDINGsrv::srv_callback, this);  
     return ext_trig;
 }
@@ -15,7 +15,7 @@ bool ROSUnit_UpdateBOUNDINGsrv::srv_callback(hear_msgs::Update_Controller_Boundi
     msg.param.eps_2 = req.controller_parameters.bounding_eps_2 ;
     msg.param.h_o1 = req.controller_parameters.bounding_h_o1;
     msg.param.h_o2 = req.controller_parameters.bounding_h_o2;
-    ext_trig->UpdateCallback((UpdateMsg*)&msg);
+    ext_trig->UpdateCallback((BaseMsg*)&msg);
     return true;
 }
 
