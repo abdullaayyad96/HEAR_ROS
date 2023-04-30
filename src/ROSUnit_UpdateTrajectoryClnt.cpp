@@ -17,6 +17,7 @@ bool ROSUnit_UpdateTrajectoryClnt::process(BaseMsg* t_msg) {
     Trajectory_UpdateMsg* _update_msg = (Trajectory_UpdateMsg*)t_msg;
     hear_msgs::Update_Trajectory srv;
     srv.request.trajectory_parameters.trajectoryType = (int)_update_msg->param._trajectoryType;
+    srv.request.trajectory_parameters.samplingType = (int)_update_msg->param._samplingType;
     srv.request.trajectory_parameters.transformationType = (int)_update_msg->param._transformationType;
     srv.request.trajectory_parameters.scale = _update_msg->param.scale;
     srv.request.trajectory_parameters.rot = _update_msg->param.rot;
