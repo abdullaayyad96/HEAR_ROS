@@ -23,6 +23,7 @@
 #include "HEAR_ROS/ROSUnit_FloatSub.hpp"
 #include "HEAR_ROS/ROSUnit_QuatSub.hpp"
 #include "HEAR_ROS/ROSUnit_FloatSrv.hpp"
+#include "HEAR_ROS/ROSUnit_Float3Srv.hpp"
 #include <ros/ros.h>
 
 namespace HEAR{
@@ -203,6 +204,11 @@ ExternalTrigger<BaseMsg>* RosSystem::createUpdateTrigger(MSG_TYPE type, std::str
         }
         case MSG_TYPE::FLOAT_MSG : {
             auto srv = new ROSUnit_FloatServer(pnh_);
+            trig = srv->registerServer(topic);
+            break;
+        }
+        case MSG_TYPE::FLOAT3_MSG : {
+            auto srv = new ROSUnit_Float3Server(pnh_);
             trig = srv->registerServer(topic);
             break;
         }
