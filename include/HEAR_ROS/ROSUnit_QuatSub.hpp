@@ -17,7 +17,7 @@ public:
 };
 
 ROSUnitQuatSub::ROSUnitQuatSub (ros::NodeHandle& nh, const std::string& topic, int idx){
-    sub_ = nh.subscribe<geometry_msgs::Quaternion>(topic, 10, &ROSUnitQuatSub::callback, this);
+    sub_ = nh.subscribe<geometry_msgs::Quaternion>(topic, 1, &ROSUnitQuatSub::callback, this);
     _output_port = new OutputPort<tf2::Quaternion>(idx, 0);
     id_ = idx;
 }
