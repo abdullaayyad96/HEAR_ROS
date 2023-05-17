@@ -10,7 +10,7 @@ namespace HEAR{
 class ROSUnitPointPub : public ROSUnit_Pub{
 public:
     ROSUnitPointPub(ros::NodeHandle& nh, const std::string& topic_name, int idx){
-        pub_ = nh.advertise<geometry_msgs::Point>(topic_name, 10);
+        pub_ = nh.advertise<geometry_msgs::Point>(topic_name, 1);
         _input_port = new InputPort<Vector3D<float>>(idx, 0);
         id_ = idx;
     }

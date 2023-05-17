@@ -12,7 +12,7 @@ namespace HEAR{
 class ROSUnitQuatPub : public ROSUnit_Pub{
 public:
     ROSUnitQuatPub(ros::NodeHandle& nh, const std::string& topic_name, int idx){
-        pub_ = nh.advertise<geometry_msgs::Quaternion>(topic_name, 10);
+        pub_ = nh.advertise<geometry_msgs::Quaternion>(topic_name, 1);
         _input_port = new InputPort<tf2::Quaternion>(idx, 0);
         id_ = idx;
     }
