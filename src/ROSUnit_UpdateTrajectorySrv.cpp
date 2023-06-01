@@ -16,8 +16,8 @@ bool ROSUnit_UpdateTrajectorySrv::srv_callback(hear_msgs::Update_Trajectory::Req
     msg.param.rot = req.trajectory_parameters.rot;
     msg.param.trans = req.trajectory_parameters.trans;
     msg.param.scale = req.trajectory_parameters.scale;
-    // msg.param.NumSamples = req.trajectory_parameters.NumSamples;
     msg.param.TotalExecutionTime = req.trajectory_parameters.TotalExecutionTime;
+    msg.param.Velocity = req.trajectory_parameters.Velocity;
     msg.param.ClearQ = req.trajectory_parameters.ClearQ;
     
     ext_trig->UpdateCallback((BaseMsg*)&msg);

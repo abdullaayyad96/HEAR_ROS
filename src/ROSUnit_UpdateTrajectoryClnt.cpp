@@ -22,8 +22,8 @@ bool ROSUnit_UpdateTrajectoryClnt::process(BaseMsg* t_msg) {
     srv.request.trajectory_parameters.scale = _update_msg->param.scale;
     srv.request.trajectory_parameters.rot = _update_msg->param.rot;
     srv.request.trajectory_parameters.trans = _update_msg->param.trans;
-    // srv.request.trajectory_parameters.NumSamples = _update_msg->param.NumSamples;
     srv.request.trajectory_parameters.TotalExecutionTime = _update_msg->param.TotalExecutionTime;
+    srv.request.trajectory_parameters.Velocity = _update_msg->param.Velocity;
     srv.request.trajectory_parameters.ClearQ = _update_msg->param.ClearQ;
     bool success = false;
     success = m_client.call(srv);
