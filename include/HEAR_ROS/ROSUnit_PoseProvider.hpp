@@ -4,6 +4,8 @@
 #include <vector>
 
 #include "ros/ros.h"
+#include "/home/abdulla/codes/HEAR/devel/include/mavros_msgs/VehicleAngularVelocity.h"
+// #include <mavros_msgs/VehicleAngularVelocity.h>
 #include <geometry_msgs/Vector3Stamped.h>
 #include <geometry_msgs/QuaternionStamped.h>
 #include <geometry_msgs/PoseStamped.h>
@@ -22,7 +24,7 @@ namespace HEAR{
 class ROSUnit_PoseProvider{
 private:
     ros::NodeHandle nh_;
-    ros::Subscriber opti_sub, xsens_ori_sub, xsens_ang_vel_sub, xsens_free_acc_sub;
+    ros::Subscriber opti_sub, xsens_ori_sub, xsens_ang_vel_sub, xsens_free_acc_sub, px4_ang_vel_sub;
     ros::ServiceServer m_server;
     
     ExternalOutputPort<Vector3D<float>>* opti_pos_port;
@@ -31,10 +33,12 @@ private:
     ExternalOutputPort<Vector3D<float>>* imu_ori_port;
     ExternalOutputPort<Vector3D<float>>* imu_acc_port;
     ExternalOutputPort<Vector3D<float>>* imu_angular_rt_port;
+    ExternalOutputPort<Vector3D<float>>* px4_imu_angular_rt_port;
     void callback_opti_pose(const geometry_msgs::PoseStamped::ConstPtr& );
     void callback_ori(const geometry_msgs::QuaternionStamped::ConstPtr& );
     void callback_free_acc(const geometry_msgs::Vector3Stamped::ConstPtr& );
     void callback_angular_vel(const geometry_msgs::Vector3Stamped::ConstPtr&);
+    void callback_px4_angular_vel(const mavros_msgs::VehicleAngularVelocity::ConstPtr&);
     bool srv_callback(hear_msgs::set_float::Request&, hear_msgs::set_float::Response&);
     tf2::Matrix3x3 rot_offset;
     tf2::Vector3 trans_offset;
@@ -51,6 +55,7 @@ public:
     std::vector<ExternalOutputPort<Vector3D<float>>*> registerOptiPose(std::string t_name);
     ExternalOutputPort<Vector3D<float>>* registerImuOri(std::string t_name);
     ExternalOutputPort<Vector3D<float>>* registerImuAngularRate(std::string t_name);
+    ExternalOutputPort<Vector3D<float>>* registerPX4ImuAngularRate(std::string t_name);
     ExternalOutputPort<Vector3D<float>>* registerImuAcceleration(std::string t_name);
 };
 

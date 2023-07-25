@@ -35,6 +35,13 @@ ExternalOutputPort<Vector3D<float>>* ROSUnit_PoseProvider::registerImuAngularRat
     return imu_angular_rt_port;
 }
 
+ExternalOutputPort<Vector3D<float>>* ROSUnit_PoseProvider::registerPX4ImuAngularRate(std::string t_name){
+    px4_imu_angular_rt_port = new ExternalOutputPort<Vector3D<float>>(0);
+    px4_imu_angular_rt_port->write(Vector3D<float>(0,0,0));
+    px4_ang_vel_sub = nh_.subscribe(t_name, 10, &ROSUnit_PoseProvider::callback_px4_angular_vel, this, ros::TransportHints().tcpNoDelay());
+    return px4_imu_angular_rt_port;
+}
+
 ExternalOutputPort<Vector3D<float>>* ROSUnit_PoseProvider::registerImuAcceleration(std::string t_name){
     imu_acc_port = new ExternalOutputPort<Vector3D<float>>(0);
     imu_acc_port->write(Vector3D<float>(0,0,0));
@@ -112,6 +119,12 @@ void ROSUnit_PoseProvider::callback_angular_vel(const geometry_msgs::Vector3Stam
     Vector3D<float> vec = {(float)msg->vector.x, (float)msg->vector.y, (float)msg->vector.z};
 
     imu_angular_rt_port->write(vec);
+}
+
+void ROSUnit_PoseProvider::callback_px4_angular_vel(const mavros_msgs::VehicleAngularVelocity::ConstPtr& msg){
+    Vector3D<float> vec = {(float)msg->angular_velocity_x, -(float)msg->angular_velocity_y, -(float)msg->angular_velocity_z};
+
+    px4_imu_angular_rt_port->write(vec);
 }
 
 void ROSUnit_PoseProvider::callback_free_acc(const geometry_msgs::Vector3Stamped::ConstPtr& msg){
