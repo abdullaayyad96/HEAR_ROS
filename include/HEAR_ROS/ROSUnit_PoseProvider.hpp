@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "ros/ros.h"
-#include "/home/abdulla/codes/HEAR/devel/include/mavros_msgs/VehicleAngularVelocity.h"
+#include "/home/orbit3/HEAR/devel/include/mavros_msgs/VehicleAngularVelocity.h"
 // #include <mavros_msgs/VehicleAngularVelocity.h>
 #include <geometry_msgs/Vector3Stamped.h>
 #include <geometry_msgs/QuaternionStamped.h>
@@ -35,6 +35,7 @@ private:
     ExternalOutputPort<Vector3D<float>>* imu_angular_rt_port;
     ExternalOutputPort<Vector3D<float>>* px4_imu_angular_rt_port;
     void callback_opti_pose(const geometry_msgs::PoseStamped::ConstPtr& );
+    void callback_px4_pose(const geometry_msgs::PoseStamped::ConstPtr& );
     void callback_ori(const geometry_msgs::QuaternionStamped::ConstPtr& );
     void callback_free_acc(const geometry_msgs::Vector3Stamped::ConstPtr& );
     void callback_angular_vel(const geometry_msgs::Vector3Stamped::ConstPtr&);
@@ -53,6 +54,7 @@ public:
     ROSUnit_PoseProvider(ros::NodeHandle& nh);
     ~ROSUnit_PoseProvider(){}
     std::vector<ExternalOutputPort<Vector3D<float>>*> registerOptiPose(std::string t_name);
+    std::vector<ExternalOutputPort<Vector3D<float>>*> registerPX4Pose(std::string t_name);
     ExternalOutputPort<Vector3D<float>>* registerImuOri(std::string t_name);
     ExternalOutputPort<Vector3D<float>>* registerImuAngularRate(std::string t_name);
     ExternalOutputPort<Vector3D<float>>* registerPX4ImuAngularRate(std::string t_name);

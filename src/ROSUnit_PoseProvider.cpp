@@ -21,6 +21,21 @@ std::vector<ExternalOutputPort<Vector3D<float>>*> ROSUnit_PoseProvider::register
     return std::vector<ExternalOutputPort<Vector3D<float>>*>{opti_pos_port, opti_vel_port, opti_ori_port};
 }
 
+std::vector<ExternalOutputPort<Vector3D<float>>*> ROSUnit_PoseProvider::registerPX4Pose(std::string t_name){
+    m_server = nh_.advertiseService("set_height_offset", &ROSUnit_PoseProvider::srv_callback, this);
+    rot_offset.setRPY(0.0, 0.0, 0.0);
+    trans_offset.setZero();
+    
+    opti_pos_port = new ExternalOutputPort<Vector3D<float>>(0);
+    opti_pos_port->write(Vector3D<float>(0,0,0));
+    opti_vel_port = new ExternalOutputPort<Vector3D<float>>(0);
+    opti_vel_port->write(Vector3D<float>(0,0,0));
+    opti_ori_port = new ExternalOutputPort<Vector3D<float>>(0);
+    opti_ori_port->write(Vector3D<float>(0,0,0));
+    opti_sub = nh_.subscribe(t_name, 10, &ROSUnit_PoseProvider::callback_px4_pose, this, ros::TransportHints().tcpNoDelay());
+    return std::vector<ExternalOutputPort<Vector3D<float>>*>{opti_pos_port, opti_vel_port, opti_ori_port};
+}
+
 ExternalOutputPort<Vector3D<float>>* ROSUnit_PoseProvider::registerImuOri(std::string t_name){
     imu_ori_port = new ExternalOutputPort<Vector3D<float>>(0);
     imu_ori_port->write(Vector3D<float>(0,0,0));
@@ -65,6 +80,56 @@ void ROSUnit_PoseProvider::callback_opti_pose(const geometry_msgs::PoseStamped::
     auto R_mat = tf2::Matrix3x3(tf2::Quaternion(msg->pose.orientation.x, msg->pose.orientation.y, msg->pose.orientation.z, msg->pose.orientation.w ));
 
     R_mat = rot_offset * R_mat * rot_offset.transpose();
+    tf2Scalar yaw, pitch, roll;
+    R_mat.getEulerYPR(yaw, pitch, roll);
+
+    Vector3D<float> vec_ori = {(float)roll, (float)pitch, (float)yaw};
+
+    // velocity calculation
+    if(first_read == 0){
+        first_read = 1;
+        prevT = msg->header.stamp;
+        prev_pos = pos;
+        vel = tf2::Vector3(0, 0, 0);
+        prev_diff = vel;
+    }else{
+        auto _dt = (msg->header.stamp - prevT).toSec();
+        auto diff = (pos - prev_pos)/_dt;
+        vel = diff;
+        if(first_read == 1){
+            first_read = 2;
+            prev_diff = diff;
+        }
+        auto d_diff = diff - prev_diff;
+        if(abs(d_diff.x()) > PEAK_THRESH || abs(d_diff.y()) > PEAK_THRESH || abs(d_diff.z()) > PEAK_THRESH){
+            vel = _hold;
+        }
+        else{
+            _hold = diff;
+        }
+        prev_diff = diff;
+        prev_pos = pos;
+        prevT = msg->header.stamp;
+    }
+    opti_vel = rot_offset*vel;
+    ////////////////////////
+
+    opti_pos_port->write(vec);
+    opti_vel_port->write(Vector3D<float>(opti_vel.x(), opti_vel.y(), opti_vel.z()));
+    opti_ori_port->write(vec_ori);
+}
+
+void ROSUnit_PoseProvider::callback_px4_pose(const geometry_msgs::PoseStamped::ConstPtr& msg){
+    
+    tf2::Vector3 vel;
+    auto pos = tf2::Vector3({msg->pose.position.x, msg->pose.position.y, msg->pose.position.z});
+    auto calib_pos = pos; //rot_offset*pos - trans_offset;
+
+    Vector3D<float> vec = {(float)calib_pos.x(), (float)calib_pos.y(), (float)calib_pos.z()};
+
+    auto R_mat = tf2::Matrix3x3(tf2::Quaternion(msg->pose.orientation.x, msg->pose.orientation.y, msg->pose.orientation.z, msg->pose.orientation.w ));
+
+    // R_mat = rot_offset * R_mat * rot_offset.transpose();
     tf2Scalar yaw, pitch, roll;
     R_mat.getEulerYPR(yaw, pitch, roll);
 
